@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class ViewController: UIViewController {
     
@@ -21,8 +22,23 @@ class ViewController: UIViewController {
         text.backgroundColor = UIColor(white: 0, alpha: 0.03)
         text.borderStyle = .roundedRect
         text.font = UIFont.systemFont(ofSize: 14)
+        text.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return text
     }()
+    
+    @objc func handleTextInputChange() {
+        let isFormValid = emailTextField.text?.count ?? 0 > 0 &&
+        userNameTextField.text?.count ?? 0 > 0 &&
+        passwordTextField.text?.count ?? 0 > 0
+        if isFormValid {
+            signUpButton.isEnabled = true
+            signUpButton.backgroundColor = UIColor.rgb(red: 17, green: 154, blue: 236)
+        } else {
+            signUpButton.isEnabled = false
+            signUpButton.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
+        }
+        
+    }
     
     let userNameTextField: UITextField = {
         let text = UITextField()
@@ -30,6 +46,7 @@ class ViewController: UIViewController {
         text.backgroundColor = UIColor(white: 0, alpha: 0.03)
         text.borderStyle = .roundedRect
         text.font = UIFont.systemFont(ofSize: 14)
+        text.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return text
     }()
     
@@ -40,6 +57,7 @@ class ViewController: UIViewController {
         text.backgroundColor = UIColor(white: 0, alpha: 0.03)
         text.borderStyle = .roundedRect
         text.font = UIFont.systemFont(ofSize: 14)
+        text.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return text
     }()
     
@@ -50,9 +68,26 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.setTitleColor(.white, for: .normal)
-        
+        button.addTarget(self, action: #selector(handleSignIn), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
+    
+    @objc func handleSignIn() {
+        
+        guard let email = emailTextField.text, email.count > 0, email.contains("@") else { return }
+        guard let userName = userNameTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+
+        Auth.auth().createUser(withEmail: email, password: password) { user, error in
+            if let error = error {
+                print ("Failed to create user: \(error)")
+            }
+            
+            print ("succesfully created user: \(user?.user.uid ?? "")")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
