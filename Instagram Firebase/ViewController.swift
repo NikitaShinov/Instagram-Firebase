@@ -7,14 +7,40 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
+import FirebaseStorage
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "plus_photo")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return button
     }()
+    
+    @objc func handlePlusPhoto() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let editedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            plusPhotoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        } else if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        
+        plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.gray.cgColor
+        plusPhotoButton.layer.borderWidth = 3
+        
+        dismiss(animated: true, completion: nil)
+    }
     
     let emailTextField: UITextField = {
         let text = UITextField()
@@ -84,8 +110,48 @@ class ViewController: UIViewController {
             if let error = error {
                 print ("Failed to create user: \(error)")
             }
+            guard let image = self.plusPhotoButton.imageView?.image else { return }
             
-            print ("succesfully created user: \(user?.user.uid ?? "")")
+            guard let imageData = image.pngData() else { return }
+            
+            let storage = Storage.storage().reference()
+            
+            let fileName = NSUUID().uuidString
+            
+            print ("Starting upload")
+            
+            storage.child("profile_images").child(fileName).putData(imageData, metadata: nil) { _, error in
+                guard error == nil else {
+                    print ("Failed to upload")
+                    return
+                }
+                
+                print ("Downloading url")
+                storage.child("profile_images").child(fileName).downloadURL { url, error in
+                    guard let url = url, error == nil else {
+                        return
+                    }
+                    print ("Success in download")
+                    let urlString = url.absoluteString
+                    print ("Download url: \(urlString)")
+                    
+                    print ("succesfully created user: \(user?.user.uid ?? "")")
+
+                    guard let uid = user?.user.uid else { return }
+
+                    let usernameValues = ["username" : userName,
+                                          "profileImageUrl" : urlString]
+                    let values = [uid: usernameValues]
+
+                    Database.database().reference().child("users").updateChildValues(values) { error, reference in
+                        if let error = error {
+                            print ("Failed to save user info into DB: \(error)")
+                        }
+                        print ("Sucessfully saved")
+                    }
+                }
+            }
+            
         }
     }
 
@@ -100,8 +166,6 @@ class ViewController: UIViewController {
          
         setupInputField()
 
-        
-        
     }
     
     fileprivate func setupInputField() {
