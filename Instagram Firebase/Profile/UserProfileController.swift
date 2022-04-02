@@ -16,14 +16,37 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         collectionView.backgroundColor = .white
         
-//        navigationItem.title = Auth.auth().currentUser?.uid
-        
         fetchUser()
         
         collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerID")
         
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         
+        setupLogOutButton()
+        
+    }
+    
+    fileprivate func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+        
+    }
+    
+    @objc func handleLogOut() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                
+                
+            } catch let signOutError {
+                print ("Error: \(signOutError)")
+            }
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
