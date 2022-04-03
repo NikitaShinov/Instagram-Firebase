@@ -163,6 +163,17 @@ class SignUpController: UIViewController, UIImagePickerControllerDelegate, UINav
                             print ("Failed to save user info into DB: \(error)")
                         }
                         print ("Sucessfully saved")
+                        
+                        guard let window = UIApplication.shared.connectedScenes
+                                .filter({$0.activationState == .foregroundActive})
+                                .map({$0 as? UIWindowScene})
+                                .compactMap({$0})
+                                .first?.windows
+                                .filter({$0.isKeyWindow}).first?.rootViewController as? MainTabBarController else { return }
+                        
+                        window.setupViewControllers()
+
+                        self.dismiss(animated: true, completion: nil)
                     }
                 }
             }
