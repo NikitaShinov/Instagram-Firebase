@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		48FFAEF018D3DA07E4D0FB5C /* Pods_Instagram_Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87F464D816B8194F62653E2A /* Pods_Instagram_Firebase.framework */; };
 		502048E327FB528A001D6AA8 /* PhotoSelectorHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048E227FB528A001D6AA8 /* PhotoSelectorHeader.swift */; };
+		502048E527FBB1A9001D6AA8 /* SharePhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048E427FBB1A9001D6AA8 /* SharePhotoController.swift */; };
 		5025B54527F5BDE2000EC522 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54427F5BDE2000EC522 /* AppDelegate.swift */; };
 		5025B54727F5BDE2000EC522 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54627F5BDE2000EC522 /* SceneDelegate.swift */; };
 		5025B54927F5BDE2000EC522 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54827F5BDE2000EC522 /* SignUpController.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		502048E227FB528A001D6AA8 /* PhotoSelectorHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorHeader.swift; sourceTree = "<group>"; };
+		502048E427FBB1A9001D6AA8 /* SharePhotoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePhotoController.swift; sourceTree = "<group>"; };
 		5025B54127F5BDE2000EC522 /* Instagram Firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instagram Firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5025B54427F5BDE2000EC522 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5025B54627F5BDE2000EC522 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				5025B56827FB0EB8000EC522 /* PhotoSelectorController.swift */,
 				5025B56A27FB21F1000EC522 /* PhotoSelectorCell.swift */,
 				502048E227FB528A001D6AA8 /* PhotoSelectorHeader.swift */,
+				502048E427FBB1A9001D6AA8 /* SharePhotoController.swift */,
 			);
 			path = AddPhoto;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				5025B56927FB0EB8000EC522 /* PhotoSelectorController.swift in Sources */,
 				5025B56027F889A9000EC522 /* UserProfileController.swift in Sources */,
 				5025B55E27F8885F000EC522 /* MainTabBarController.swift in Sources */,
+				502048E527FBB1A9001D6AA8 /* SharePhotoController.swift in Sources */,
 				502048E327FB528A001D6AA8 /* PhotoSelectorHeader.swift in Sources */,
 				5025B54727F5BDE2000EC522 /* SceneDelegate.swift in Sources */,
 				5025B56627F909CB000EC522 /* LoginController.swift in Sources */,
