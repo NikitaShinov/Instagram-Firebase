@@ -9,7 +9,7 @@ import UIKit
 
 class PhotoSelectorController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
-    let cellId = "cellId"
+    let cellId = "cellId" 
     let headerId = "headerId"
     
     override func viewDidLoad() {
