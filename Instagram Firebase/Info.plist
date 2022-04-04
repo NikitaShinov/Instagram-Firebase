@@ -5,7 +5,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Please allow access to take a profile picture.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We&apos;d like access to your photos.</string>
+	<string>HELLO</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow library usage.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
