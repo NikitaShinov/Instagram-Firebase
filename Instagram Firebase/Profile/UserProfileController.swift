@@ -26,16 +26,40 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         setupLogOutButton()
         
-        fetchPosts()
+//        fetchPosts()
+        fetchOrderedPosts()
         
     }
+    
+    var posts = [Post]()
     
     fileprivate func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
         
     }
     
-    var posts = [Post]()
+    fileprivate func fetchOrderedPosts() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let reference = Database.database().reference().child("posts").child(uid)
+        
+        reference.queryOrdered(byChild: "creationDate").observe(.childAdded) { snapshot in
+            
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            
+            let post = Post(dictionary: dictionary)
+            self.posts.append(post)
+            
+            self.collectionView.reloadData()
+            
+        } withCancel: { error in
+            print ("Caught error: \(error)")
+        }
+
+        
+    }
+    
     fileprivate func fetchPosts() {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
