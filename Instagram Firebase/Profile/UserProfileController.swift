@@ -25,8 +25,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         setupLogOutButton()
-        
-//        fetchPosts()
+    
         fetchOrderedPosts()
         
     }
@@ -48,8 +47,11 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
+            guard let user = self.user else { return }
+            
+            let post = Post(user: user, dictionary: dictionary)
+            self.posts.insert(post, at: 0)
+//            self.posts.append(post)
             
             self.collectionView.reloadData()
             
@@ -58,32 +60,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         }
 
         
-    }
-    
-    fileprivate func fetchPosts() {
-        
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let reference = Database.database().reference().child("posts").child(uid)
-        
-        reference.observeSingleEvent(of: .value) { snapshot in
-            
-            guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            
-            dictionaries.forEach { key, value in
-                
-                guard let dictionary = value as? [String: Any] else { return }
-                
-                let post = Post(dictionary: dictionary)
-                self.posts.append(post)
-            }
-            
-            self.collectionView.reloadData()
-            
-        } withCancel: { error in
-            print (error.localizedDescription)
-        }
-
     }
     
     @objc func handleLogOut() {
@@ -163,16 +139,5 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         }, withCancel: { error in
             print (error.localizedDescription)
         } )
-    }
-}
-
-
-struct User {
-    let username: String
-    let profileImageUrl: String
-    
-    init(dictionary: [String: Any]) {
-        self.username = dictionary["username"] as? String ?? ""
-        self.profileImageUrl = dictionary["profileImageUrl"] as? String ?? ""
     }
 }

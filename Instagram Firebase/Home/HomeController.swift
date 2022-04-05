@@ -31,25 +31,36 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let reference = Database.database().reference().child("posts").child(uid)
-        
-        reference.observeSingleEvent(of: .value) { snapshot in
+        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value) { snapshot in
+            guard let userDictionary = snapshot.value as? [String: Any] else { return }
+            let user = User(dictionary: userDictionary)
             
-            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            let reference = Database.database().reference().child("posts").child(uid)
             
-            dictionaries.forEach { key, value in
+            reference.observeSingleEvent(of: .value) { snapshot in
                 
-                guard let dictionary = value as? [String: Any] else { return }
+                guard let dictionaries = snapshot.value as? [String: Any] else { return }
                 
-                let post = Post(dictionary: dictionary)
-                self.posts.append(post)
+                dictionaries.forEach { key, value in
+                    
+                    guard let dictionary = value as? [String: Any] else { return }
+                    
+                    let post = Post(user: user, dictionary: dictionary)
+                    self.posts.append(post)
+                }
+                
+                self.collectionView.reloadData()
+                
+            } withCancel: { error in
+                print (error.localizedDescription)
             }
             
-            self.collectionView.reloadData()
-            
         } withCancel: { error in
-            print (error.localizedDescription)
+            print ("failed to fetch user: \(error)")
         }
+
+        
+        
 
     }
     
