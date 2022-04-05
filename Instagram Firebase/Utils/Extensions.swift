@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 extension UIColor {
     
@@ -41,6 +42,23 @@ extension UIView {
         }
         if height != 0 {
             heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
+    }
+}
+
+extension Database {
+    static func fetchUserWithUID(uid: String, completion: @escaping (User) -> Void) {
+        
+        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value) { snapshot in
+            guard let userDictionary = snapshot.value as? [String: Any] else { return }
+            let user = User(uid: uid, dictionary: userDictionary)
+            
+            print ("username:\(user.username)")
+            
+            completion(user)
+
+        } withCancel: { error in
+            print ("failed to fetch user: \(error)")
         }
     }
 }
