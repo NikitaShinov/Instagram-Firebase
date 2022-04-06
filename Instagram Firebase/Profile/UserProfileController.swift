@@ -13,6 +13,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     let cellId = "cellId"
     let headerId = "headerId"
     var userId: String?
+    var user: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,16 +27,12 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         setupLogOutButton()
-    
-//        fetchOrderedPosts()
-        
     }
     
     var posts = [Post]()
     
     fileprivate func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
-        
     }
     
     fileprivate func fetchOrderedPosts() {
@@ -52,15 +49,11 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             
             let post = Post(user: user, dictionary: dictionary)
             self.posts.insert(post, at: 0)
-//            self.posts.append(post)
-            
             self.collectionView.reloadData()
             
         } withCancel: { error in
             print ("Caught error: \(error)")
         }
-
-        
     }
     
     @objc func handleLogOut() {
@@ -120,8 +113,6 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
     }
-    
-    var user: User?
     
     fileprivate func fetchUser() {
         
