@@ -12,6 +12,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     let cellId = "cellId"
     let headerId = "headerId"
+    var userId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,13 +21,13 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
         
         fetchUser()
         
-        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerID")
+        collectionView.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
         collectionView.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         setupLogOutButton()
     
-        fetchOrderedPosts()
+//        fetchOrderedPosts()
         
     }
     
@@ -39,7 +40,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     fileprivate func fetchOrderedPosts() {
         
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let uid = self.user?.uid else { return }
         
         let reference = Database.database().reference().child("posts").child(uid)
         
@@ -111,7 +112,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerID", for: indexPath) as! UserProfileHeader
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
         header.user = self.user
         return header
     }
@@ -124,7 +125,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     fileprivate func fetchUser() {
         
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         
         Database.fetchUserWithUID(uid: uid) { user in
             self.user = user
@@ -132,6 +133,8 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             self.navigationItem.title = self.user?.username
             
             self.collectionView.reloadData()
+            
+            self.fetchOrderedPosts()
         }
 
     }
