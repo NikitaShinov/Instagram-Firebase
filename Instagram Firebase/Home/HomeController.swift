@@ -22,10 +22,26 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         setupNavigationItems()
         
         fetchPosts()
+        fetchFollowingUserIds()
+
         
     }
     
     var posts = [Post]()
+    
+    fileprivate func fetchFollowingUserIds() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value) { snapshot in
+            guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
+            userIdsDictionary.forEach { key, value in
+                Database.fetchUserWithUID(uid: key) { user in
+                    self.fetchPostsWithUser(user: user)
+                }
+            }
+        } withCancel: { error in
+            print ("Failed to fetch following user uids: \(error)")
+        }
+    }
     
     fileprivate func fetchPosts() {
         
@@ -49,6 +65,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 let post = Post(user: user, dictionary: dictionary)
                 
                 self.posts.append(post)
+            }
+            
+            self.posts.sort { post1, post2 in
+                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
             }
             
             self.collectionView.reloadData()
