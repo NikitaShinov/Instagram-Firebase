@@ -49,7 +49,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         let homeNavController = templateNavController(unselectedImage: "home_unselected", selectedImage: "home_selected", rootViewController: HomeController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         //search
-        let searchNavController = templateNavController(unselectedImage: "search_unselected", selectedImage: "search_selected")
+        let searchNavController = templateNavController(unselectedImage: "search_unselected", selectedImage: "search_selected", rootViewController: UserSearchController(collectionViewLayout: UICollectionViewFlowLayout()))
         
         //plus
         let plusNavController = templateNavController(unselectedImage: "plus_unselected", selectedImage: "plus_selected")
@@ -68,9 +68,9 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         tabBar.tintColor = .black
         
         viewControllers = [homeNavController,
-                           likeNavController,
-                           plusNavController,
                            searchNavController,
+                           plusNavController,
+                           likeNavController,
                            userProfileNavController]
         
         //modify tab bar insets
