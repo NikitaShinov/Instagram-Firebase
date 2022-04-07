@@ -22,6 +22,7 @@
 		502048FD27FF2745001D6AA8 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048FC27FF2745001D6AA8 /* PreviewPhotoContainerView.swift */; };
 		502048FF27FF590C001D6AA8 /* CustomAnimationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048FE27FF590C001D6AA8 /* CustomAnimationPresenter.swift */; };
 		5020490127FF5D2D001D6AA8 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020490027FF5D2D001D6AA8 /* CustomAnimationDismisser.swift */; };
+		5020490327FF9D06001D6AA8 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020490227FF9D06001D6AA8 /* CommentsController.swift */; };
 		5025B54527F5BDE2000EC522 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54427F5BDE2000EC522 /* AppDelegate.swift */; };
 		5025B54727F5BDE2000EC522 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54627F5BDE2000EC522 /* SceneDelegate.swift */; };
 		5025B54927F5BDE2000EC522 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54827F5BDE2000EC522 /* SignUpController.swift */; };
@@ -53,6 +54,7 @@
 		502048FC27FF2745001D6AA8 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		502048FE27FF590C001D6AA8 /* CustomAnimationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresenter.swift; sourceTree = "<group>"; };
 		5020490027FF5D2D001D6AA8 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
+		5020490227FF9D06001D6AA8 /* CommentsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		5025B54127F5BDE2000EC522 /* Instagram Firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instagram Firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5025B54427F5BDE2000EC522 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5025B54627F5BDE2000EC522 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			children = (
 				502048EE27FC7A18001D6AA8 /* HomeController.swift */,
 				502048F027FC7B0C001D6AA8 /* HomePostCell.swift */,
+				5020490227FF9D06001D6AA8 /* CommentsController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				502048EF27FC7A18001D6AA8 /* HomeController.swift in Sources */,
 				502048F327FCAF55001D6AA8 /* User.swift in Sources */,
 				502048EA27FC670F001D6AA8 /* UserProfilePhotoCell.swift in Sources */,
+				5020490327FF9D06001D6AA8 /* CommentsController.swift in Sources */,
 				5025B55A27F5F6BC000EC522 /* Extensions.swift in Sources */,
 				5025B56B27FB21F1000EC522 /* PhotoSelectorCell.swift in Sources */,
 			);

@@ -8,7 +8,8 @@
 import UIKit
 import Firebase
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HomePostCellDelegate {
+    
     
     let cellId = "cellId"
     
@@ -136,6 +137,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomePostCell
         
+        cell.delegate = self
+        
         if let post = post {
             cell.post = post
         } else {
@@ -147,4 +150,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         return cell
     }
+    
+    func didTapComment(post: Post) {
+        print ("Message coming from homecontroller")
+        print (post.caption)
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(commentsController, animated: true)
+    }
+    
 }
