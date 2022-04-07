@@ -14,6 +14,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var posts = [Post]()
     
+    var post: Post?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +44,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     @objc private func handleRefresh() {
         print ("refresh")
+        posts.removeAll()
         fetchAllPosts()
     }
     
@@ -104,6 +107,14 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func setupNavigationItems() {
         navigationItem.titleView = UIImageView(image: UIImage(named: "logo2"))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "camera3")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCamera))
+    }
+    
+    @objc private func handleCamera() {
+        print ("Camera")
+        let cameraController = CameraController()
+        cameraController.modalPresentationStyle = .fullScreen
+        present(cameraController, animated: true, completion: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -123,12 +134,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomePostCell
         
-        cell.post = posts[indexPath.item]
-//        let post = posts[indexPath.item]
-//        if !posts.isEmpty {
-//          cell.post = post
-//        }
-//
+        if let post = post {
+            cell.post = post
+        } else {
+            print("posts \(posts.count)")
+            if posts.count > 0{
+                cell.post = posts[indexPath.row]
+            }
+        }
+        
         return cell
     }
 }

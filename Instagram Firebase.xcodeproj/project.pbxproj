@@ -18,6 +18,7 @@
 		502048F327FCAF55001D6AA8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048F227FCAF55001D6AA8 /* User.swift */; };
 		502048F627FDAEB5001D6AA8 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048F527FDAEB5001D6AA8 /* UserSearchController.swift */; };
 		502048F827FDB3B9001D6AA8 /* UserSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048F727FDB3B9001D6AA8 /* UserSearchCell.swift */; };
+		502048FB27FEEBDD001D6AA8 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502048FA27FEEBDD001D6AA8 /* CameraController.swift */; };
 		5025B54527F5BDE2000EC522 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54427F5BDE2000EC522 /* AppDelegate.swift */; };
 		5025B54727F5BDE2000EC522 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54627F5BDE2000EC522 /* SceneDelegate.swift */; };
 		5025B54927F5BDE2000EC522 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025B54827F5BDE2000EC522 /* SignUpController.swift */; };
@@ -45,6 +46,7 @@
 		502048F227FCAF55001D6AA8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		502048F527FDAEB5001D6AA8 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
 		502048F727FDB3B9001D6AA8 /* UserSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchCell.swift; sourceTree = "<group>"; };
+		502048FA27FEEBDD001D6AA8 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		5025B54127F5BDE2000EC522 /* Instagram Firebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Instagram Firebase.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5025B54427F5BDE2000EC522 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5025B54627F5BDE2000EC522 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,14 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		502048F927FEEBCF001D6AA8 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				502048FA27FEEBDD001D6AA8 /* CameraController.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		5025B53827F5BDE2000EC522 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +136,7 @@
 		5025B54327F5BDE2000EC522 /* Instagram Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				502048F927FEEBCF001D6AA8 /* Camera */,
 				502048F427FDAEA1001D6AA8 /* Search */,
 				502048ED27FC7A0A001D6AA8 /* Home */,
 				502048E627FC6524001D6AA8 /* Models */,
@@ -326,6 +337,7 @@
 				502048EC27FC6F30001D6AA8 /* CustomImageView.swift in Sources */,
 				502048F627FDAEB5001D6AA8 /* UserSearchController.swift in Sources */,
 				502048E827FC6532001D6AA8 /* Post.swift in Sources */,
+				502048FB27FEEBDD001D6AA8 /* CameraController.swift in Sources */,
 				5025B56027F889A9000EC522 /* UserProfileController.swift in Sources */,
 				5025B55E27F8885F000EC522 /* MainTabBarController.swift in Sources */,
 				502048E527FBB1A9001D6AA8 /* SharePhotoController.swift in Sources */,
