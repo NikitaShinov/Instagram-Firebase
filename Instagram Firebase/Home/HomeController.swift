@@ -113,7 +113,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     @objc private func handleCamera() {
         print ("Camera")
         let cameraController = CameraController()
+//        let cameraNavController = UINavigationController(rootViewController: cameraController)
         cameraController.modalPresentationStyle = .fullScreen
+//        present(cameraController, animated: true, completion: nil)
         present(cameraController, animated: true, completion: nil)
     }
     
