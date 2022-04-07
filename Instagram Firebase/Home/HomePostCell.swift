@@ -38,7 +38,6 @@ class HomePostCell: UICollectionViewCell {
         let image = CustomImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
-        image.backgroundColor = .red
         image.layer.cornerRadius = 40 / 2
         return image
     }()

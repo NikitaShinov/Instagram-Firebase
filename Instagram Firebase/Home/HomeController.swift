@@ -12,22 +12,43 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     let cellId = "cellId"
     
+    var posts = [Post]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let updateFeedNotificationName = NSNotification.Name(rawValue: "UpdateFeed")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: updateFeedNotificationName, object: nil)
         
         collectionView.backgroundColor = .white
         
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
         setupNavigationItems()
         
-        fetchPosts()
-        fetchFollowingUserIds()
+        fetchAllPosts()
 
         
     }
     
-    var posts = [Post]()
+    @objc private func handleUpdateFeed() {
+        handleRefresh()
+    }
+    
+    @objc private func handleRefresh() {
+        print ("refresh")
+        fetchAllPosts()
+    }
+    
+    fileprivate func fetchAllPosts() {
+        fetchPosts()
+        fetchFollowingUserIds()
+    }
     
     fileprivate func fetchFollowingUserIds() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -57,6 +78,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         let reference = Database.database().reference().child("posts").child(user.uid)
         reference.observeSingleEvent(of: .value) { snapshot in
+            
+            self.collectionView.refreshControl?.endRefreshing()
+            
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach { key, value in
@@ -100,7 +124,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomePostCell
         
         cell.post = posts[indexPath.item]
-        
+//        let post = posts[indexPath.item]
+//        if !posts.isEmpty {
+//          cell.post = post
+//        }
+//
         return cell
     }
 }

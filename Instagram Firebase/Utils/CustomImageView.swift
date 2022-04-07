@@ -18,8 +18,11 @@ class CustomImageView: UIImageView {
         
         lastUrlUsedToLoadImage = urlString
         
+        self.image = nil
+        
         if let cachedImage = imageCache[urlString] {
             self.image = cachedImage
+            return
         }
         
         guard let url = URL(string: urlString) else { return }
@@ -27,6 +30,7 @@ class CustomImageView: UIImageView {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 print ("error --- \(error)")
+                return
             }
             
             if url.absoluteString != self.lastUrlUsedToLoadImage { return }
