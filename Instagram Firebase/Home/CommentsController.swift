@@ -8,9 +8,11 @@
 import UIKit
 import Firebase
 
-class CommentsController: UICollectionViewController {
+class CommentsController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     var post: Post?
+    
+    let cellId = "cellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +21,16 @@ class CommentsController: UICollectionViewController {
         
         collectionView?.backgroundColor = .red
         
-        tabBarController?.tabBar.isHidden = true 
+        tabBarController?.tabBar.isHidden = true
+        
+        collectionView.register(CommentCell.self, forCellWithReuseIdentifier: cellId)
+        
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        
+        fetchComments()
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +69,29 @@ class CommentsController: UICollectionViewController {
         return text
     }()
     
+    var comments = [Comment]()
+    
+    fileprivate func fetchComments() {
+        
+        guard let postId = self.post?.id else { return }
+        print (postId)
+        let reference = Database.database().reference().child("comments").child(postId)
+        reference.observe(.childAdded) { snapshot in
+            
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            
+            let comment = Comment(dictionary: dictionary)
+            
+            self.comments.append(comment)
+            self.collectionView.reloadData()
+            print (self.comments)
+    
+        } withCancel: { error in
+            print ("Error fetching comments: \(error)")
+        }
+
+    }
+    
     @objc private func submitComment() {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -77,6 +111,20 @@ class CommentsController: UICollectionViewController {
             print ("successfully entered comment")
         }
         
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return comments.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CommentCell
+        cell.comment = comments[indexPath.item]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 50)
     }
     
     override var inputAccessoryView: UIView? {
