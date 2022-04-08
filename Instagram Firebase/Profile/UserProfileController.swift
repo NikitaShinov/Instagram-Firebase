@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
 
 class UserProfileController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate {
     
@@ -36,8 +37,62 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     
     var posts = [Post]()
     
+    var isFinishedPaging = false
+    
     fileprivate func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "gear")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
+    }
+    
+    fileprivate func paginate() {
+        print ("Start paging")
+        
+        guard let uid = self.user?.uid else { return }
+        
+        let reference = Database.database().reference().child("posts").child(uid)
+        
+        var query = reference.queryOrderedByKey()
+        
+        if posts.count > 0 {
+            let value = posts.last?.id
+            query = query.queryStarting(atValue: value)
+        }
+//        let value = "-Mzuhapxv1Ym4M_uAFkr"
+//        let query = reference.queryOrderedByKey().queryStarting(atValue: value).queryLimited(toFirst: 6)
+        
+        query.queryLimited(toFirst: 4).observeSingleEvent(of: .value) { snapshot in
+            
+            guard var allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            if allObjects.count < 4 {
+                self.isFinishedPaging = true
+            }
+            
+            if self.posts.count > 0 {
+                allObjects.removeFirst()
+            }
+            
+            
+            guard let user = self.user else { return }
+            
+            allObjects.forEach({ snapshot in
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                var post = Post(user: user, dictionary: dictionary)
+                
+                post.id = snapshot.key
+                
+                self.posts.append(post)
+//                print (snapshot.key)
+                
+            })
+            self.posts.forEach { post in
+                print (post.id ?? "")
+            }
+            self.collectionView.reloadData()
+            
+        } withCancel: { error in
+            print ("Failed to paginate")
+        }
+
     }
     
     fileprivate func fetchOrderedPosts() {
@@ -88,6 +143,11 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //making paginate call
+        if indexPath.item == self.posts.count - 1 && !isFinishedPaging {
+            print ("paginating post")
+            paginate()
+        }
         
         if isGridView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
@@ -153,7 +213,7 @@ class UserProfileController: UICollectionViewController, UICollectionViewDelegat
             
             self.collectionView.reloadData()
             
-            self.fetchOrderedPosts()
+            self.paginate()
         }
 
     }
