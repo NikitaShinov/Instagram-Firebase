@@ -8,7 +8,8 @@
 import UIKit
 import Firebase
 
-class CommentsController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class CommentsController: UICollectionViewController, UICollectionViewDelegateFlowLayout, CommentInputAccessoryViewDelegate {
+
     
     var post: Post?
     
@@ -48,35 +49,33 @@ class CommentsController: UICollectionViewController, UICollectionViewDelegateFl
         tabBarController?.tabBar.isHidden = false
     }
     
-    lazy var containerView: UIView = {
-        let containerView = UIView()
-        containerView.backgroundColor = .white
-        containerView.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        
-        let submitButton = UIButton(type: .system)
-        submitButton.setTitle("Submit", for: .normal)
-        submitButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        submitButton.setTitleColor(.black, for: .normal)
-        submitButton.addTarget(self, action: #selector(submitComment), for: .touchUpInside)
-        containerView.addSubview(submitButton)
-        submitButton.anchor(top: containerView.topAnchor, left: nil, bottom: containerView.bottomAnchor, right: containerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 50, height: 0)
-        
-        
-        containerView.addSubview(self.commentTextField)
-        self.commentTextField.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: containerView.bottomAnchor, right: submitButton.leftAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-        let lineSeparatorView = UIView()
-        lineSeparatorView.backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
-        containerView.addSubview(lineSeparatorView)
-        lineSeparatorView.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 1)
-        return containerView
+    lazy var containerView: CommentInputAccessoryView = {
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let commentInputAccView = CommentInputAccessoryView(frame: frame)
+        commentInputAccView.delegate = self
+        return commentInputAccView
     }()
     
-    let commentTextField: UITextField = {
-        let text = UITextField()
-        text.placeholder = "Enter comment"
-        return text
-    }()
+    func didSubmit(for comment: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        print ("submitting comment: \(comment)")
+        
+        let postId = post?.id ?? ""
+        
+        let values = ["text": comment,
+                      "creationDate": Date().timeIntervalSince1970,
+                      "uid": uid] as [String: Any]
+        Database.database().reference().child("comments").child(postId).childByAutoId().updateChildValues(values) { error, reference in
+            if let error = error {
+                print ("failed to insert comment:\(error)")
+                return
+            }
+            
+            print ("successfully entered comment")
+            
+            self.containerView.clearCommentTextField()
+        }
+    }
     
     var comments = [Comment]()
     
@@ -108,26 +107,6 @@ class CommentsController: UICollectionViewController, UICollectionViewDelegateFl
 
     }
     
-    @objc private func submitComment() {
-        
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        print ("submitting comment: \(commentTextField.text ?? "")")
-        
-        let postId = post?.id ?? ""
-        
-        let values = ["text": commentTextField.text ?? "",
-                      "creationDate": Date().timeIntervalSince1970,
-                      "uid": uid] as [String: Any]
-        Database.database().reference().child("comments").child(postId).childByAutoId().updateChildValues(values) { error, reference in
-            if let error = error {
-                print ("failed to insert comment:\(error)")
-                return
-            }
-            
-            print ("successfully entered comment")
-        }
-        
-    }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return comments.count

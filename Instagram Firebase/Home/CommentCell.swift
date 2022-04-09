@@ -24,8 +24,7 @@ class CommentCell: UICollectionViewCell {
         let label = UITextView()
         label.font = UIFont.systemFont(ofSize: 14)
         label.isScrollEnabled = false
-//        label.numberOfLines = 0
-//        label.backgroundColor = .lightGray
+
         return label
     }()
     
@@ -33,14 +32,12 @@ class CommentCell: UICollectionViewCell {
         let image = CustomImageView()
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
-//        image.backgroundColor = .blue
         return image
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-//        backgroundColor = .yellow
+
         
         addSubview(profileImageView)
         
