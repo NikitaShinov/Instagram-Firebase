@@ -42,6 +42,7 @@ class CommentInputAccessoryView: UIView {
         super .init(frame: frame)
         
         autoresizingMask = .flexibleHeight
+        backgroundColor = .white
     
         addSubview(submitButton)
         submitButton.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 50, height: 50)
